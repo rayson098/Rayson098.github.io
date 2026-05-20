@@ -1,0 +1,715 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>抗憂鬱症藥物-國考練習題</title>
+  <style>
+    :root {
+      --bg: #f7efe3;
+      --paper: #fffaf1;
+      --ink: #20201d;
+      --muted: #6d665d;
+      --accent: #d94f2b;
+      --accent-2: #173f5f;
+      --accent-3: #f3b23c;
+      --green: #2f855a;
+      --red: #b83232;
+      --line: rgba(32, 32, 29, 0.14);
+      --shadow: 0 18px 50px rgba(40, 31, 21, 0.12);
+      --radius: 24px;
+    }
+
+    * { box-sizing: border-box; }
+    html { scroll-behavior: smooth; }
+
+    body {
+      margin: 0;
+      font-family: ui-serif, "Noto Serif TC", "Songti TC", Georgia, serif;
+      background:
+        radial-gradient(circle at top left, rgba(243, 178, 60, .32), transparent 32rem),
+        radial-gradient(circle at 90% 8%, rgba(217, 79, 43, .14), transparent 28rem),
+        var(--bg);
+      color: var(--ink);
+      line-height: 1.65;
+    }
+
+    .progress-bar {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 0%;
+      height: 6px;
+      background: linear-gradient(90deg, var(--accent), var(--accent-3));
+      z-index: 99;
+      transition: width .2s ease;
+    }
+
+    header.hero {
+      min-height: 88vh;
+      display: grid;
+      align-items: center;
+      padding: 8rem 6vw 5rem;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .tag {
+      display: inline-flex;
+      gap: .5rem;
+      align-items: center;
+      width: fit-content;
+      border: 1px solid var(--line);
+      border-radius: 999px;
+      padding: .35rem .85rem;
+      background: rgba(255, 250, 241, .7);
+      font-family: ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      font-size: .85rem;
+      letter-spacing: .04em;
+    }
+
+    .tag::before {
+      content: "";
+      width: .7rem;
+      height: .7rem;
+      border-radius: 50%;
+      background: var(--accent);
+      display: inline-block;
+    }
+
+    h1 {
+      font-size: clamp(3.1rem, 9vw, 8.6rem);
+      line-height: .92;
+      letter-spacing: -.065em;
+      max-width: 1050px;
+      margin: 1.35rem 0 1.2rem;
+    }
+
+    .hero p {
+      font-size: clamp(1.05rem, 2vw, 1.45rem);
+      max-width: 760px;
+      color: var(--muted);
+      margin: 0 0 2rem;
+    }
+
+    .hero-actions {
+      display: flex;
+      flex-wrap: wrap;
+      gap: .8rem;
+      align-items: center;
+    }
+
+    button, .button-link {
+      border: none;
+      border-radius: 999px;
+      padding: .85rem 1.2rem;
+      cursor: pointer;
+      font-family: ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      font-weight: 700;
+      font-size: .95rem;
+      transition: transform .15s ease, box-shadow .15s ease, background .15s ease;
+    }
+
+    button:hover, .button-link:hover { transform: translateY(-2px); }
+
+    .primary {
+      color: #fff;
+      background: var(--ink);
+      box-shadow: 0 12px 30px rgba(32,32,29,.18);
+      text-decoration: none;
+      display: inline-flex;
+    }
+
+    .secondary {
+      color: var(--ink);
+      background: rgba(255, 250, 241, .8);
+      border: 1px solid var(--line);
+    }
+
+    .floating-card {
+      position: absolute;
+      right: 6vw;
+      bottom: 5rem;
+      width: min(330px, 82vw);
+      padding: 1.15rem;
+      border-radius: var(--radius);
+      background: rgba(255, 250, 241, .82);
+      border: 1px solid var(--line);
+      box-shadow: var(--shadow);
+      transform: rotate(-2deg);
+    }
+
+    .floating-card strong {
+      display: block;
+      font-size: 2.4rem;
+      line-height: 1;
+      letter-spacing: -.05em;
+    }
+
+    .floating-card span {
+      color: var(--muted);
+      font-family: ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      font-size: .92rem;
+    }
+
+    main { padding: 0 6vw 6rem; }
+
+    .section-intro {
+      max-width: 850px;
+      margin: 0 auto 4rem;
+      padding: 6rem 0 1rem;
+    }
+
+    .section-intro h2 {
+      font-size: clamp(2.2rem, 5vw, 4.7rem);
+      line-height: .95;
+      letter-spacing: -.05em;
+      margin: 0 0 1rem;
+    }
+
+    .section-intro p {
+      color: var(--muted);
+      font-size: 1.15rem;
+    }
+
+    .dashboard {
+      position: sticky;
+      top: 1rem;
+      z-index: 10;
+      max-width: 1100px;
+      margin: 0 auto 2.5rem;
+      display: grid;
+      grid-template-columns: 1fr auto;
+      gap: 1rem;
+      align-items: center;
+      padding: .9rem;
+      border-radius: 999px;
+      background: rgba(255,250,241,.82);
+      border: 1px solid var(--line);
+      backdrop-filter: blur(12px);
+      box-shadow: 0 8px 24px rgba(40, 31, 21, .08);
+    }
+
+    .meter {
+      height: .75rem;
+      background: rgba(32,32,29,.1);
+      border-radius: 999px;
+      overflow: hidden;
+    }
+
+    .meter-fill {
+      height: 100%;
+      width: 0%;
+      background: linear-gradient(90deg, var(--accent-2), var(--accent));
+      border-radius: 999px;
+      transition: width .3s ease;
+    }
+
+    .score-pill {
+      min-width: 130px;
+      text-align: center;
+      color: #fff;
+      background: var(--accent-2);
+      border-radius: 999px;
+      padding: .45rem .85rem;
+      font-family: ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      font-weight: 800;
+    }
+
+    .quiz-grid {
+      max-width: 1100px;
+      margin: 0 auto;
+      display: grid;
+      gap: 2rem;
+    }
+
+    .quiz-card {
+      display: grid;
+      grid-template-columns: minmax(0, .78fr) minmax(300px, 1fr);
+      gap: 1.5rem;
+      align-items: stretch;
+      min-height: 520px;
+      border-radius: calc(var(--radius) + 8px);
+      background: var(--paper);
+      border: 1px solid var(--line);
+      box-shadow: var(--shadow);
+      overflow: hidden;
+    }
+
+    .question-side {
+      padding: 2rem;
+      background:
+        linear-gradient(135deg, rgba(23, 63, 95, .95), rgba(23, 63, 95, .72)),
+        radial-gradient(circle at 10% 20%, rgba(243, 178, 60, .7), transparent 12rem);
+      color: #fff;
+      position: relative;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+    }
+
+    .question-side::after {
+      content: "";
+      position: absolute;
+      width: 13rem;
+      height: 13rem;
+      right: -4rem;
+      bottom: -4rem;
+      border-radius: 50%;
+      border: 1.25rem solid rgba(255,255,255,.11);
+    }
+
+    .year {
+      font-family: ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      font-size: .9rem;
+      letter-spacing: .08em;
+      text-transform: uppercase;
+      opacity: .78;
+      margin-bottom: 1rem;
+    }
+
+    .question-side h3 {
+      margin: 0;
+      font-size: clamp(1.55rem, 3vw, 2.55rem);
+      line-height: 1.18;
+      letter-spacing: -.045em;
+    }
+
+    .hint {
+      margin-top: 1.5rem;
+      padding: 1rem;
+      border-radius: 18px;
+      background: rgba(255,255,255,.12);
+      border: 1px solid rgba(255,255,255,.18);
+      font-family: ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      font-size: .96rem;
+      position: relative;
+      z-index: 1;
+    }
+
+    .answer-side {
+      padding: 2rem;
+      display: flex;
+      flex-direction: column;
+      gap: 1rem;
+    }
+
+    .options {
+      display: grid;
+      gap: .8rem;
+    }
+
+    .option {
+      width: 100%;
+      border-radius: 18px;
+      padding: 1rem 1.05rem;
+      text-align: left;
+      background: #fff;
+      border: 1px solid var(--line);
+      color: var(--ink);
+      font-family: ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      font-weight: 650;
+      line-height: 1.45;
+      box-shadow: 0 8px 18px rgba(40,31,21,.04);
+    }
+
+    .option.correct {
+      background: rgba(47, 133, 90, .12);
+      border-color: rgba(47, 133, 90, .5);
+    }
+
+    .option.wrong {
+      background: rgba(184, 50, 50, .1);
+      border-color: rgba(184, 50, 50, .45);
+    }
+
+    .option:disabled { cursor: default; }
+
+    .feedback {
+      display: none;
+      border-radius: 20px;
+      padding: 1.2rem;
+      border: 1px solid var(--line);
+      background: rgba(247,239,227,.65);
+      animation: fadeUp .35s ease both;
+    }
+
+    .feedback.show { display: block; }
+
+    .feedback h4 {
+      margin: 0 0 .4rem;
+      font-size: 1.25rem;
+    }
+
+    .feedback p { margin: .45rem 0; }
+    .feedback ul { margin: .45rem 0 0; padding-left: 1.2rem; }
+
+    .mini-table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-top: .7rem;
+      font-family: ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      font-size: .94rem;
+    }
+
+    .mini-table th, .mini-table td {
+      padding: .65rem .55rem;
+      border-bottom: 1px solid var(--line);
+      vertical-align: top;
+    }
+
+    .mini-table th { text-align: left; color: var(--accent-2); }
+
+    .takeaway {
+      margin-top: auto;
+      padding: 1rem;
+      border-radius: 18px;
+      background: rgba(243,178,60,.16);
+      border: 1px solid rgba(243,178,60,.35);
+      font-family: ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+    }
+
+    .takeaway strong { color: var(--accent); }
+
+    .recap {
+      max-width: 1100px;
+      margin: 4rem auto 0;
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 1.2rem;
+    }
+
+    .recap-card {
+      border-radius: var(--radius);
+      background: var(--paper);
+      border: 1px solid var(--line);
+      padding: 1.4rem;
+      box-shadow: 0 12px 30px rgba(40,31,21,.08);
+    }
+
+    .recap-card h3 {
+      margin: 0 0 .7rem;
+      font-size: 1.45rem;
+      letter-spacing: -.03em;
+    }
+
+    .drug-map {
+      display: flex;
+      flex-wrap: wrap;
+      gap: .6rem;
+      margin-top: .85rem;
+    }
+
+    .drug-chip {
+      padding: .45rem .7rem;
+      border-radius: 999px;
+      background: #fff;
+      border: 1px solid var(--line);
+      font-family: ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      font-weight: 700;
+      font-size: .9rem;
+    }
+
+    footer {
+      padding: 4rem 6vw 5rem;
+      color: var(--muted);
+      text-align: center;
+      font-family: ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+    }
+
+    @keyframes fadeUp {
+      from { opacity: 0; transform: translateY(8px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    @media (max-width: 860px) {
+      header.hero { min-height: auto; padding-top: 6rem; }
+      .floating-card { position: static; margin-top: 2.5rem; transform: rotate(0); }
+      .quiz-card { grid-template-columns: 1fr; min-height: auto; }
+      .question-side { min-height: 340px; }
+      .dashboard { border-radius: 24px; grid-template-columns: 1fr; }
+      .score-pill { width: 100%; }
+      .recap { grid-template-columns: 1fr; }
+    }
+
+    @media print {
+      .progress-bar, .dashboard, .hero-actions, footer { display: none; }
+      body { background: #fff; }
+      .quiz-card, .recap-card { box-shadow: none; break-inside: avoid; }
+      .feedback { display: block !important; }
+    }
+  </style>
+</head>
+<body>
+  <div class="progress-bar" id="scrollProgress"></div>
+
+  <header class="hero">
+    <div>
+      <div class="tag">國考藥理互動練習</div>
+      <h1>抗憂鬱症藥物<br>國考練習題</h1>
+      <p>
+        從 101、103、106、111、112、113 年醫師國考題出發，把抗憂鬱藥的分類、機轉與副作用變成一趟互動式複習。
+        每一題先作答，再看為什麼對、為什麼錯。
+      </p>
+      <div class="hero-actions">
+        <a class="button-link primary" href="#practice">開始作答</a>
+        <button class="secondary" type="button" onclick="resetQuiz()">重置分數</button>
+      </div>
+    </div>
+    <aside class="floating-card" aria-label="題目摘要">
+      <strong>6 題</strong>
+      <span>SSRI、SNRI、TCA、MAOI、trazodone、mirtazapine，一次整理。</span>
+    </aside>
+  </header>
+
+  <main id="practice">
+    <section class="section-intro">
+      <h2>先猜答案，再讓詳解說服你。</h2>
+      <p>
+        這不是單純背藥名。這組題目的核心，是把「藥物分類」和「受體阻斷造成的副作用」連在一起。
+        點選選項後，卡片會顯示完整詳解與國考記憶點。
+      </p>
+    </section>
+
+    <div class="dashboard" aria-live="polite">
+      <div class="meter" aria-label="答題進度">
+        <div class="meter-fill" id="meterFill"></div>
+      </div>
+      <div class="score-pill" id="scoreText">0 / 6 已作答</div>
+    </div>
+
+    <section class="quiz-grid" id="quizGrid"></section>
+
+    <section class="recap" aria-label="總複習">
+      <article class="recap-card">
+        <h3>一張表記住 TCA 副作用</h3>
+        <table class="mini-table">
+          <thead>
+            <tr><th>機轉</th><th>副作用</th></tr>
+          </thead>
+          <tbody>
+            <tr><td>H1 blockade</td><td>鎮靜、嗜睡、體重增加</td></tr>
+            <tr><td>Muscarinic blockade</td><td>口乾、便秘、尿滯留、視力模糊</td></tr>
+            <tr><td>α1 blockade</td><td>姿態性低血壓、頭暈</td></tr>
+            <tr><td>Na⁺ channel blockade</td><td>心室傳導延長、QRS widening、心律不整</td></tr>
+          </tbody>
+        </table>
+      </article>
+
+      <article class="recap-card">
+        <h3>分類速記</h3>
+        <div class="drug-map">
+          <span class="drug-chip">SSRI：fluoxetine / citalopram</span>
+          <span class="drug-chip">SNRI：venlafaxine / duloxetine</span>
+          <span class="drug-chip">TCA：amitriptyline / imipramine</span>
+          <span class="drug-chip">MAOI：selegiline</span>
+          <span class="drug-chip">SARI：trazodone</span>
+          <span class="drug-chip">NaSSA：mirtazapine</span>
+          <span class="drug-chip">NDRI / unicyclic：bupropion</span>
+        </div>
+      </article>
+    </section>
+  </main>
+
+  <footer>
+    抗憂鬱症藥物-國考練習題｜互動式複習網站
+  </footer>
+
+  <script>
+    const questions = [
+      {
+        year: "101 年 醫師（一）醫學（二）第 75 題",
+        prompt: "使用三環類抗憂鬱症藥物時，經常會因為藥物同時具有阻斷 histamine H1 受體、muscarinic 乙醯膽鹼受體及 α-adrenergic receptors 而產生一些副作用。下列哪一種副作用不是因為上述受體被三環類抗憂鬱症藥物阻斷所產生？",
+        hint: "關鍵不是問 TCA 會不會造成，而是問：是不是由 H1、muscarinic、α1 receptor blockade 造成。",
+        options: [
+          "姿態性低血壓（orthostatic hypotension）",
+          "尿液滯留（urine retention）",
+          "延長心室傳導所需之時間",
+          "鎮靜作用（sedation）"
+        ],
+        answer: 2,
+        explanationTitle: "答案：C. 延長心室傳導所需之時間",
+        explanation: `TCA 的鎮靜、尿滯留、姿態性低血壓分別可以用 H1、muscarinic、α1 receptor blockade 解釋。但是心室傳導延長主要來自心臟快速 Na⁺ channel blockade，表現在 ECG 可見 QRS widening，嚴重時會造成心律不整。`,
+        bullets: [
+          "H1 blockade → sedation、體重增加。",
+          "Muscarinic blockade → 口乾、便秘、尿滯留。",
+          "α1 blockade → orthostatic hypotension。",
+          "Na⁺ channel blockade → ventricular conduction delay，不屬於題幹三種 receptor blockade。"
+        ],
+        takeaway: "TCA 心臟毒性請記 Na⁺ channel，而不是 H1 / M / α1。"
+      },
+      {
+        year: "103 年 醫師（一）醫學（二）第 72 題",
+        prompt: "下列抗憂鬱藥中，何種屬於 monoamine oxidase inhibitors？",
+        hint: "看到 MAOI，要想到 monoamine 分解被抑制；選項中有一個是 MAO-B inhibitor。",
+        options: ["selegiline", "paroxetine", "imipramine", "bupropion"],
+        answer: 0,
+        explanationTitle: "答案：A. selegiline",
+        explanation: `Selegiline 是 MAO-B inhibitor，屬於 monoamine oxidase inhibitor。抑制 MAO 後，可減少 serotonin、norepinephrine、dopamine 等 monoamine 的分解。`,
+        bullets: [
+          "Paroxetine → SSRI。",
+          "Imipramine → TCA。",
+          "Bupropion → NDRI / unicyclic antidepressant。",
+          "Selegiline → MAOI，尤其常考 MAO-B inhibitor。"
+        ],
+        takeaway: "Selegiline = MAO-B inhibitor。"
+      },
+      {
+        year: "106 年 醫師（一）醫學（二）第 3 題",
+        prompt: "下列哪一個抗憂鬱藥物抑制 serotonin 和 norepinephrine 的再回收，較沒有 anticholinergic 以及 α-adrenergic blocking 的副作用？",
+        hint: "題幹同時給你兩個線索：5-HT + NE reuptake inhibition，而且副作用比 TCA 少。",
+        options: ["amitriptyline", "venlafaxine", "fluoxetine", "selegiline"],
+        answer: 1,
+        explanationTitle: "答案：B. venlafaxine",
+        explanation: `Venlafaxine 是 SNRI，會抑制 serotonin 與 norepinephrine reuptake。和 TCA 相比，SNRI 較少 muscarinic receptor blockade 與 α1 receptor blockade，因此較少口乾、便秘、尿滯留與姿態性低血壓。`,
+        bullets: [
+          "Amitriptyline → TCA，抗膽鹼與 α1 blocking 副作用多。",
+          "Fluoxetine → SSRI，主要抑制 serotonin reuptake。",
+          "Selegiline → MAO-B inhibitor。",
+          "Venlafaxine → SNRI，是本題關鍵。"
+        ],
+        takeaway: "5-HT + NE reuptake inhibition 且副作用較少 → SNRI。"
+      },
+      {
+        year: "111 年 醫師（一）醫學（二）第 73 題",
+        prompt: "有關抗憂鬱藥物作用的敘述，下列何者正確？",
+        hint: "這題一次考四個藥：amitriptyline、trazodone、mirtazapine、venlafaxine。",
+        options: [
+          "amitriptyline 較不會造成口乾、便秘等副作用，適合用於老年人",
+          "trazodone 為 5-HT2 受體的拮抗劑，除抗憂鬱的作用外亦具有安眠的作用",
+          "mirtazapine 為突觸前 α2 腎上腺素受體的作用劑，增加 norepinephrine 和 5-HT 的釋放",
+          "venlafaxine 為單胺氧化酶 B 的選擇性抑制劑，增加突觸 norepinephrine 的含量"
+        ],
+        answer: 1,
+        explanationTitle: "答案：B. trazodone 為 5-HT2 受體拮抗劑，且有安眠作用",
+        explanation: `Trazodone 屬於 SARI，具有 5-HT2 receptor antagonism，也有鎮靜與助眠效果。A 錯在 amitriptyline 是 TCA，抗膽鹼副作用明顯；C 錯在 mirtazapine 是 α2 antagonist，不是 agonist；D 錯在 venlafaxine 是 SNRI，不是 MAO-B inhibitor。`,
+        bullets: [
+          "Amitriptyline：TCA，口乾、便秘、尿滯留常見，老年人要小心。",
+          "Trazodone：5-HT2 antagonist，可助眠。",
+          "Mirtazapine：presynaptic α2 antagonist，增加 NE 與 5-HT release。",
+          "Venlafaxine：SNRI；MAO-B inhibitor 是 selegiline。"
+        ],
+        takeaway: "Mirtazapine 是 α2 antagonist，不是 agonist；trazodone 常考助眠。"
+      },
+      {
+        year: "112 年 醫師（一）醫學（二）第 72 題",
+        prompt: "下列神經傳遞物質，何者與 fluoxetine 抗憂鬱的作用機制最有關聯性？",
+        hint: "先把 fluoxetine 分類：它是最典型的 SSRI 之一。",
+        options: ["norepinephrine", "serotonin", "glutamate", "acetylcholine"],
+        answer: 1,
+        explanationTitle: "答案：B. serotonin",
+        explanation: `Fluoxetine 是 SSRI，selective serotonin reuptake inhibitor。它主要抑制 serotonin reuptake，使突觸間隙 serotonin 增加，因此和 serotonin 最相關。`,
+        bullets: [
+          "Norepinephrine：較常和 SNRI、TCA、NRI 相關。",
+          "Glutamate：較常和 ketamine / esketamine 的 NMDA receptor 機轉相關。",
+          "Acetylcholine：不是 fluoxetine 抗憂鬱作用的主要 neurotransmitter。",
+          "Serotonin：SSRI 的核心。"
+        ],
+        takeaway: "Fluoxetine → SSRI → serotonin。"
+      },
+      {
+        year: "113 年 醫師（一）醫學（二）第 73 題",
+        prompt: "請排序下列抗憂鬱藥物的分類，依序為 selective serotonin reuptake inhibitor、serotonin-norepinephrine reuptake inhibitor、tricyclic antidepressant 及 unicyclic antidepressant。",
+        hint: "不要急著看四個選項，先把四個分類各自對應一個代表藥。",
+        options: [
+          "citalopram、duloxetine、imipramine、bupropion",
+          "duloxetine、citalopram、bupropion、imipramine",
+          "citalopram、imipramine、duloxetine、bupropion",
+          "duloxetine、bupropion、imipramine、citalopram"
+        ],
+        answer: 0,
+        explanationTitle: "答案：A. citalopram、duloxetine、imipramine、bupropion",
+        explanation: `題目要求順序是 SSRI、SNRI、TCA、unicyclic antidepressant。Citalopram 是 SSRI；duloxetine 是 SNRI；imipramine 是 TCA；bupropion 是 NDRI，也常被歸類為 unicyclic antidepressant。`,
+        bullets: [
+          "SSRI → citalopram。",
+          "SNRI → duloxetine。",
+          "TCA → imipramine。",
+          "Unicyclic / NDRI → bupropion。"
+        ],
+        takeaway: "分類題請先背代表藥，再做排序。"
+      }
+    ];
+
+    const answered = new Map();
+    const quizGrid = document.getElementById('quizGrid');
+    const meterFill = document.getElementById('meterFill');
+    const scoreText = document.getElementById('scoreText');
+
+    function renderQuiz() {
+      quizGrid.innerHTML = questions.map((q, index) => `
+        <article class="quiz-card" id="q${index + 1}">
+          <div class="question-side">
+            <div>
+              <div class="year">${q.year}</div>
+              <h3>${q.prompt}</h3>
+            </div>
+            <div class="hint">提示：${q.hint}</div>
+          </div>
+          <div class="answer-side">
+            <div class="options">
+              ${q.options.map((opt, optIndex) => `
+                <button class="option" type="button" onclick="selectOption(${index}, ${optIndex}, this)">
+                  ${String.fromCharCode(65 + optIndex)}. ${opt}
+                </button>
+              `).join('')}
+            </div>
+            <div class="feedback" id="feedback-${index}">
+              <h4>${q.explanationTitle}</h4>
+              <p>${q.explanation}</p>
+              <ul>${q.bullets.map(b => `<li>${b}</li>`).join('')}</ul>
+            </div>
+            <div class="takeaway"><strong>國考記憶點：</strong>${q.takeaway}</div>
+          </div>
+        </article>
+      `).join('');
+    }
+
+    function selectOption(questionIndex, optionIndex, button) {
+      const card = button.closest('.quiz-card');
+      const optionButtons = [...card.querySelectorAll('.option')];
+      const q = questions[questionIndex];
+      const wasAnswered = answered.has(questionIndex);
+
+      if (!wasAnswered) {
+        answered.set(questionIndex, optionIndex === q.answer);
+      }
+
+      optionButtons.forEach((btn, idx) => {
+        btn.disabled = true;
+        if (idx === q.answer) btn.classList.add('correct');
+        if (idx === optionIndex && idx !== q.answer) btn.classList.add('wrong');
+      });
+
+      document.getElementById(`feedback-${questionIndex}`).classList.add('show');
+      updateScore();
+    }
+
+    function updateScore() {
+      const totalAnswered = answered.size;
+      const correct = [...answered.values()].filter(Boolean).length;
+      const percent = (totalAnswered / questions.length) * 100;
+      meterFill.style.width = `${percent}%`;
+      scoreText.textContent = `${correct} / ${questions.length} 答對｜${totalAnswered} 已作答`;
+    }
+
+    function resetQuiz() {
+      answered.clear();
+      renderQuiz();
+      updateScore();
+      window.location.hash = '#practice';
+    }
+
+    function updateScrollProgress() {
+      const scrollTop = window.scrollY;
+      const docHeight = document.documentElement.scrollHeight - window.innerHeight;
+      const progress = docHeight > 0 ? (scrollTop / docHeight) * 100 : 0;
+      document.getElementById('scrollProgress').style.width = `${progress}%`;
+    }
+
+    window.addEventListener('scroll', updateScrollProgress);
+    renderQuiz();
+    updateScore();
+    updateScrollProgress();
+  </script>
+</body>
+</html>
